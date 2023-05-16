@@ -4,7 +4,7 @@ import os
 from services.db.connect import Store
 from datetime import datetime
 import json
-os.add_dll_directory(os.getcwd())
+# os.add_dll_directory(os.getcwd())
 
 app = Flask(__name__)
 app.config['UPLOAD_RADIO_DIR'] = 'assets\\radio'
@@ -39,7 +39,7 @@ def upload_file():
                         app.config['UPLOAD_IMAGE_DIR'], image_name))
                 store.add_music(name=" " + data['name'],
                                 image=image_name, path=radio_name)
-                data = store.getMusicLast()
+                data = store.get_music_last()
                 res = '{"id": ' + str(data[0]) + ',"name": "' + str(data[1]) + \
                     '","image": "' + str(data[2]) + \
                     '","path": "' + str(data[3]) + '"}'
@@ -52,7 +52,7 @@ def upload_file():
 @app.route("/delete-music/<id>", methods=['GET'])
 def delete_music_by_id(id):
     if request.method == 'GET':
-        music = store.getMusicById(id)
+        music = store.get_music_by_id(id)
         if (len(music) > 0):
             image_name = music[0][2]
             if image_name != "":
@@ -74,7 +74,7 @@ def delete_music_by_id(id):
 @app.route("/get-music/<id>", methods=['GET'])
 def get_music_by_id(id):
     if request.method == 'GET':
-        data = store.getMusicById(id)
+        data = store.get_music_by_id(id)
         if (len(data) > 0):
             for row in data:
                 res = '{"id": ' + str(row[0]) + ',"name": "' + str(row[1]) + \
@@ -88,7 +88,7 @@ def get_music_by_id(id):
 @app.route("/get-all-music", methods=['GET'])
 def get_all():
     if request.method == 'GET':
-        data = store.getAll()
+        data = store.get_all()
         if (len(data) > 0):
             res = "["
             for row in data:
